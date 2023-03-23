@@ -22,4 +22,9 @@
         android:name="com.example.weatherappproject.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/alertFragment"
+        android:name="com.example.weatherappproject.AlertFragment"
+        android:label="fragment_alert"
+        tools:layout="@layout/fragment_alert" />
 </navigation>

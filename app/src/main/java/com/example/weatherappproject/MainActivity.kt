@@ -1,6 +1,7 @@
 package com.example.weatherappproject
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -12,6 +13,10 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherappproject.databinding.ActivityMainBinding
+import com.example.weatherappproject.remoteData.RemoteDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,11 +42,16 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.alertFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        var remoteSource: RemoteDataSource = RemoteDataSource()
+        MainScope().launch(Dispatchers.IO){
+            var data =remoteSource.getWeatherDataOnline(31.2001,29.9187,"eng")
+            Log.i("nada", "onCreate: ${data.body().toString()}")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
