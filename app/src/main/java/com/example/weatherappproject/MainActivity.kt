@@ -47,11 +47,11 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        var remoteSource: RemoteDataSource = RemoteDataSource()
+       /*var remoteSource: RemoteDataSource = RemoteDataSource()
         MainScope().launch(Dispatchers.IO){
             var data =remoteSource.getWeatherDataOnline(31.2001,29.9187,"eng")
             Log.i("nada", "onCreate: ${data.body().toString()}")
-        }
+        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
