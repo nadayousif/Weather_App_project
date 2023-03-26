@@ -88,11 +88,11 @@
                         android:id="@+id/statusImage"
                         android:layout_width="118dp"
                         android:layout_height="92dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="56dp"
-                        app:srcCompat="@drawable/img"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/img" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -136,18 +136,19 @@
                         android:id="@+id/imageView4"
                         android:layout_width="78dp"
                         android:layout_height="58dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/cloud"
                         app:layout_constraintEnd_toEndOf="@+id/cloudText"
+                        app:layout_constraintHorizontal_bias="0.718"
                         app:layout_constraintStart_toStartOf="@+id/cloudText"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/cloudText"
-                        android:layout_width="52dp"
-                        android:layout_height="16dp"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginTop="88dp"
+                        android:layout_width="46dp"
+                        android:layout_height="37dp"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginTop="80dp"
                         android:text="40"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -189,13 +190,13 @@
 
                     <TextView
                         android:id="@+id/windText"
-                        android:layout_width="64dp"
-                        android:layout_height="19dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_width="33dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="20dp"
                         android:text="4"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.945"
+                        app:layout_constraintHorizontal_bias="0.899"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
@@ -211,9 +212,9 @@
 
                     <TextView
                         android:id="@+id/humidity"
-                        android:layout_width="53dp"
-                        android:layout_height="17dp"
-                        android:layout_marginStart="40dp"
+                        android:layout_width="27dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="48dp"
                         android:layout_marginTop="176dp"
                         android:text="70"
                         android:textColor="@color/white"
@@ -232,10 +233,10 @@
 
                     <TextView
                         android:id="@+id/ultraText"
-                        android:layout_width="65dp"
-                        android:layout_height="17dp"
-                        android:layout_marginStart="144dp"
-                        android:layout_marginTop="176dp"
+                        android:layout_width="56dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="152dp"
+                        android:layout_marginTop="164dp"
                         android:text="0"
                         android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"

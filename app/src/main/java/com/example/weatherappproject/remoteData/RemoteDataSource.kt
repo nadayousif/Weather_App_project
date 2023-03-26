@@ -15,7 +15,7 @@ class RemoteDataSource() : InterfaceRemoteDataSource {
         private var remoteDataSourceInstance: RemoteDataSource? = null
 
         @Synchronized
-        fun getInstance(context: Context): RemoteDataSource {
+        fun getInstance(): RemoteDataSource {
             if (remoteDataSourceInstance == null) {
                 remoteDataSourceInstance = RemoteDataSource()
             }

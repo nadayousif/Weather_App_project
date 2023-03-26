@@ -7,9 +7,7 @@ data class WeatherData(
     val lat: Double,
     val lon: Double,
     val alerts: List<Alert>?,
-    val addressName: String?
-
-
+    val timezone: String?
 )
 data class Current(
     val clouds: Int,
