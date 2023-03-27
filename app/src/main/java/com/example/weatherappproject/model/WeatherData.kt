@@ -3,7 +3,7 @@ package com.example.weatherappproject.model
 data class WeatherData(
     val current: Current,
     val daily: List<Daily>,
-    val hourly: List<Hourly>,
+    val hourly: List<Current>,
     val lat: Double,
     val lon: Double,
     val alerts: List<Alert>?,

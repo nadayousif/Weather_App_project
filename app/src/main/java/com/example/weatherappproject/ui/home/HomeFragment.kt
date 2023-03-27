@@ -52,6 +52,17 @@ class HomeFragment : Fragment() {
             _binding?.pressureText?.text = it.current.pressure.toString()
             _binding?.ultraText?.text = it.current.dt.toString()
             _binding?.visibiltyText?.text = it.current.temp.toString()
+            Glide.with(requireActivity()).load("https://openweathermap.org/img/wn/${it.current.weather.get(0).icon}@2x.png").into(binding.statusImage)
+
+            binding.daysWaether.apply {
+                layoutManager = LinearLayoutManager(context)
+                this.adapter = DayAdapter(it.daily)
+            }
+
+            binding.hourlyWeather.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                this.adapter = HoursAdapter(it.hourly)
+            }
 
 
         }

@@ -111,12 +111,15 @@
                 android:layout_width="417dp"
                 android:layout_height="235dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/cardView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hourlyWeather" />
 
             <androidx.cardview.widget.CardView
 
+                android:id="@+id/cardView"
                 android:layout_width="350dp"
                 android:layout_height="200dp"
                 android:layout_marginBottom="20dp"
@@ -130,7 +133,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="195dp">
 
                     <ImageView
                         android:id="@+id/imageView4"
