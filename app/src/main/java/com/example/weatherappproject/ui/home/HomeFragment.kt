@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
         myViewModelFactory = HomeViewModelFactory(Repositary.getInstance(RemoteDataSource.getInstance()))
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[HomeViewModel::class.java]
-        getLastLocation()
+
         //(myViewModel as HomeViewModel).getWeatherFromApi(31.2001,29.9187,"eng")
         (myViewModel as HomeViewModel).currentWeather.observe(viewLifecycleOwner) {
             _binding?.areaText?.text = it.timezone
