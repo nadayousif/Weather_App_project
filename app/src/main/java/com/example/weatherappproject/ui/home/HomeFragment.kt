@@ -105,11 +105,8 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i("nada", "habaaal")
-        if (checkPermissions()) {
-            Log.i("nada", "habaaal")
-            getLastLocation()
-        }
+        getLastLocation()
+
     }
 
     private fun checkPermissions(): Boolean {

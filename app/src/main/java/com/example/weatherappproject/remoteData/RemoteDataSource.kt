@@ -7,7 +7,7 @@ import retrofit2.Response
 class RemoteDataSource() : InterfaceRemoteDataSource {
 
 
-    private val weatherApiKey = "4a059725f93489b95183bbcb8c6829b9"
+    private val weatherApiKey = "6cd7f954ec06ef046ce2fefb293967ed"
 
 
     companion object {
