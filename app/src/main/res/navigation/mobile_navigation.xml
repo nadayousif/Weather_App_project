@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/dialogeFragment">
 
     <fragment
         android:id="@+id/nav_home"
@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.weatherappproject.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_favorite"
+        android:name="com.example.weatherappproject.ui.favorite.FavoriteFragment"
+        android:label="@string/menu_favorite"
+        tools:layout="@layout/fragment_favorite" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -27,4 +27,21 @@
         android:name="com.example.weatherappproject.AlertFragment"
         android:label="fragment_alert"
         tools:layout="@layout/fragment_alert" />
+    <fragment
+        android:id="@+id/dialogeFragment"
+        android:name="com.example.weatherappproject.DialogeFragment"
+        android:label="fragment_dialoge"
+        tools:layout="@layout/fragment_dialoge" >
+        <action
+            android:id="@+id/action_dialogeFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_dialogeFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.weatherappproject.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>
