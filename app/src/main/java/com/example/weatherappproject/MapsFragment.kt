@@ -65,6 +65,7 @@ class MapsFragment : Fragment() {
             }
             false
         }
+        binding.searchBtn.setOnClickListener { if(!binding.searchEditText.text.isNullOrEmpty())goToSearchLocation()}
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
 
