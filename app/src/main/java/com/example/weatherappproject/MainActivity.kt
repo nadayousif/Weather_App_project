@@ -1,5 +1,6 @@
 package com.example.weatherappproject
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherappproject.databinding.ActivityMainBinding
 import com.example.weatherappproject.remoteData.RemoteDataSource
+import com.example.weatherappproject.util.ConnectionUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        ConnectionUtils.initialize(this.applicationContext.getSystemService(ConnectivityManager::class.java))
        var remoteSource: RemoteDataSource = RemoteDataSource()
         MainScope().launch(Dispatchers.IO){
             var data =remoteSource.getWeatherDataOnline(31.2001,29.9187,"eng")

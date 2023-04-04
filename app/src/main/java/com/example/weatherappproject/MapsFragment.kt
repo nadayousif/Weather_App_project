@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
 
 import com.example.weatherappproject.databinding.FragmentMapsBinding
+import com.example.weatherappproject.util.ConnectionUtils.checkConnection
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -90,14 +91,15 @@ class MapsFragment : Fragment() {
 
     private fun goToLatLng(latitude: Double,longitude:Double, float: Float) {
         var name = "Unknown "
-        var geocoder = Geocoder(requireContext()).getFromLocation(latitude,longitude,1)
-        if (geocoder!!.size>0)
-            name = "${geocoder?.get(0)?.subAdminArea} , ${geocoder?.get(0)?.adminArea}"
-        var latLng= LatLng(latitude,longitude)
-        var update: CameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,float)
-        mMap.addMarker(MarkerOptions().position(latLng))
-        mMap.animateCamera(update)
-
+        if(checkConnection()) {
+            var geocoder = Geocoder(requireContext()).getFromLocation(latitude, longitude, 1)
+            if (geocoder!!.size > 0)
+                name = "${geocoder?.get(0)?.subAdminArea} , ${geocoder?.get(0)?.adminArea}"
+            var latLng = LatLng(latitude, longitude)
+            var update: CameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, float)
+            mMap.addMarker(MarkerOptions().position(latLng))
+            mMap.animateCamera(update)
+        }
 
     }
     private fun goToSearchLocation(){
