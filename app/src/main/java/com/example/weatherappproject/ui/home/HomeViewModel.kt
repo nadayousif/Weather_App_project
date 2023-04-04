@@ -19,4 +19,9 @@ class HomeViewModel (private val repo: RepositaryInterface) : ViewModel() {
             _currentWeather.postValue(repo.getWeatherOverNetwork(lat, lon,language).body())
         }
     }
+    fun getWeatherDataFromDB () {
+        viewModelScope.launch(Dispatchers.IO) {
+            _currentWeather.postValue(repo.getWeatherDataFromDB())
+        }
+    }
 }

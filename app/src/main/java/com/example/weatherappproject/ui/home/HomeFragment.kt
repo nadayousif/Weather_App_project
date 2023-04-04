@@ -1,6 +1,5 @@
 package com.example.weatherappproject.ui.home
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -15,16 +14,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.weatherappproject.databinding.FragmentHomeBinding
-import com.example.weatherappproject.model.WeatherData
+import com.example.weatherappproject.localData.LocalDataSource
+import com.example.weatherappproject.localData.WeatherDataDAO
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
 import com.google.android.gms.location.*
@@ -36,10 +35,12 @@ const val PERMISSION_ID = 44
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    lateinit var myViewModel: ViewModel
+    lateinit var myViewModel: HomeViewModel
     lateinit var myViewModelFactory: HomeViewModelFactory
     private lateinit var fusedClient : FusedLocationProviderClient
     lateinit var geocoder: Geocoder
+    val args:HomeFragmentArgs by navArgs()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -58,35 +59,44 @@ class HomeFragment : Fragment() {
         fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
 
-        myViewModelFactory = HomeViewModelFactory(Repositary.getInstance(RemoteDataSource.getInstance()))
+        myViewModelFactory = HomeViewModelFactory(Repositary.getInstance(RemoteDataSource.getInstance(),
+            LocalDataSource.getInstance(requireContext())))
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[HomeViewModel::class.java]
 
+            myViewModel.getWeatherDataFromDB()
+
+
         //(myViewModel as HomeViewModel).getWeatherFromApi(31.2001,29.9187,"eng")
-        (myViewModel as HomeViewModel).currentWeather.observe(viewLifecycleOwner) {
-            _binding?.areaText?.text = it.timezone
-            _binding?.tempText?.text = it.current.temp.toString()
-            val dayhome=getCurrentDay(it.current.dt.toInt())
-            _binding?.statusText?.text = it.current.weather.get(0).description
-            _binding?.dateText?.text= dayhome
-            _binding?.cloudText?.text= it.current.clouds.toString()
-            binding.humidity.text =  it.current.humidity.toString() + "%"
-            _binding?.windText?.text = it.current.wind_speed.toString()
-            _binding?.pressureText?.text = it.current.pressure.toString()
-            _binding?.ultraText?.text = it.current.dt.toString()
-            _binding?.visibiltyText?.text = it.current.temp.toString()
-            Glide.with(requireActivity()).load("https://openweathermap.org/img/wn/${it.current.weather.get(0).icon}@2x.png").into(binding.statusImage)
 
-            binding.daysWaether.apply {
-                layoutManager = LinearLayoutManager(context)
-                this.adapter = DayAdapter(it.daily)
+        (myViewModel).currentWeather.observe(viewLifecycleOwner) {
+            if (it != null) {
+                _binding?.areaText?.text = it.timezone
+                _binding?.tempText?.text = it.current.temp.toString()
+                val dayhome = getCurrentDay(it.current.dt.toInt())
+                _binding?.statusText?.text = it.current.weather.get(0).description
+                _binding?.dateText?.text = dayhome
+                _binding?.cloudText?.text = it.current.clouds.toString()
+                binding.humidity.text = it.current.humidity.toString() + "%"
+                _binding?.windText?.text = it.current.wind_speed.toString()
+                _binding?.pressureText?.text = it.current.pressure.toString()
+                _binding?.ultraText?.text = it.current.dt.toString()
+                _binding?.visibiltyText?.text = it.current.temp.toString()
+                Glide.with(requireActivity())
+                    .load("https://openweathermap.org/img/wn/${it.current.weather.get(0).icon}@2x.png")
+                    .into(binding.statusImage)
+
+                binding.daysWaether.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    this.adapter = DayAdapter(it.daily)
+                }
+
+                binding.hourlyWeather.apply {
+                    layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    this.adapter = HoursAdapter(it.hourly)
+                }
             }
-
-            binding.hourlyWeather.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                this.adapter = HoursAdapter(it.hourly)
-            }
-
 
         }
 
@@ -105,8 +115,14 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getLastLocation()
+        if (args.map){
+            Log.i("tag", "hi "+args.lat+" "+args.lon)
+            (myViewModel as HomeViewModel).getWeatherFromApi(args.lat.toDouble(),
+                args.lon.toDouble(),"eng")
 
+        }else {
+            getLastLocation()
+        }
     }
 
     private fun checkPermissions(): Boolean {

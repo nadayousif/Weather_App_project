@@ -9,7 +9,18 @@
         android:id="@+id/nav_home"
         android:name="com.example.weatherappproject.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="map"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="lon"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_favorite"
@@ -43,5 +54,9 @@
         android:id="@+id/mapsFragment"
         android:name="com.example.weatherappproject.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

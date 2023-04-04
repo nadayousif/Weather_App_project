@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.navigation.fragment.findNavController
 
 import com.example.weatherappproject.databinding.FragmentMapsBinding
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -21,19 +22,27 @@ import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.newSingleThreadContext
 
 class MapsFragment : Fragment() {
     lateinit var binding: FragmentMapsBinding
     lateinit var fusedClient: FusedLocationProviderClient
     lateinit var mapFragment: SupportMapFragment
     lateinit var mMap: GoogleMap
+    var lat :Double = 0.0
+    var lon :Double = 0.0
+    lateinit var location : LatLng
+
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
         mMap.setOnMapClickListener {
             mMap.clear()
             mMap.addMarker(MarkerOptions().position(it))
             goToLatLng(it.latitude,it.longitude,16f)
+            lat = location.latitude
+            lon = location.latitude
         }
+
 
     }
 
@@ -47,6 +56,13 @@ class MapsFragment : Fragment() {
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(callback)
         mapInitialize()
+        binding.goBtn.setOnClickListener {
+            val action = MapsFragmentDirections.actionMapsFragmentToNavHome(
+                lat.toString(),
+                lon.toString()
+        ).setMap(true)
+            findNavController().navigate(action) }
+
         return binding.root
     }
 
@@ -66,6 +82,7 @@ class MapsFragment : Fragment() {
             false
         }
         binding.searchBtn.setOnClickListener { if(!binding.searchEditText.text.isNullOrEmpty())goToSearchLocation()}
+
         fusedClient = LocationServices.getFusedLocationProviderClient(requireContext())
     }
 
@@ -86,7 +103,8 @@ class MapsFragment : Fragment() {
         var list = Geocoder(requireContext()).getFromLocationName(searchLocation,1)
         if (list!= null && list.size>0){
             var address: Address = list.get(0)
-            goToLatLng(address.latitude,address.longitude,16f)
+            goToLatLng(address.latitude,address.latitude,16f)
+
         }
 
 

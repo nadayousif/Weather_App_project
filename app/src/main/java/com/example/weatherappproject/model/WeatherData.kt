@@ -1,13 +1,31 @@
 package com.example.weatherappproject.model
 
+import androidx.annotation.NonNull
+import androidx.room.Entity
+
+@Entity(tableName = "WeatherDataTable", primaryKeys = ["lat", "lon"])
 data class WeatherData(
     val current: Current,
     val daily: List<Daily>,
     val hourly: List<Current>,
     val lat: Double,
     val lon: Double,
-    val alerts: List<Alert>?,
+   // val alerts: List<Alert>?,
     val timezone: String?
+)
+
+@Entity(tableName = "FavoriteDataTable", primaryKeys = ["latlngString"])
+data class FavoriteAddress(
+    val address: String,
+    @NonNull
+    val latitude: Double,
+    @NonNull
+    val longitude: Double,
+    val latlngString: String,
+    val currentTemp: Double,
+    val currentDescription: String,
+    val lastCheckedTime: Long,
+    val icon: String
 )
 data class Current(
     val clouds: Int,

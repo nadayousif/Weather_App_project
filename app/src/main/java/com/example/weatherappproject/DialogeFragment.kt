@@ -63,7 +63,7 @@ class DialogeFragment : Fragment() {
             }
             .setPositiveButton("Ok") { dialog, which ->
                 if (selectedLocation.equals("GPS")){
-                    val action=DialogeFragmentDirections.actionDialogeFragmentToNavHome()
+                    val action=DialogeFragmentDirections.actionDialogeFragmentToNavHome("","")
                     findNavController().navigate(action)
                 }
                 else{
