@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +58,7 @@ class MapsFragment : Fragment() {
         mapFragment.getMapAsync(callback)
         mapInitialize()
         binding.goBtn.setOnClickListener {
+            Log.i("nada", "${lat},${lon}")
             val action = MapsFragmentDirections.actionMapsFragmentToNavHome(
                 lat.toString(),
                 lon.toString()
@@ -103,6 +105,8 @@ class MapsFragment : Fragment() {
         var list = Geocoder(requireContext()).getFromLocationName(searchLocation,1)
         if (list!= null && list.size>0){
             var address: Address = list.get(0)
+            lat = address.latitude
+            lon = address.longitude
             goToLatLng(address.latitude,address.latitude,16f)
 
         }
