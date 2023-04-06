@@ -3,9 +3,11 @@ package com.example.weatherappproject.ui.favorite
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherappproject.databinding.ItemFavoriteBinding
 import com.example.weatherappproject.model.FavoriteAddress
+import com.example.weatherappproject.util.ConnectionUtils.checkConnection
 
 
 class FavoriteAdapter(
@@ -44,6 +46,16 @@ class FavoriteAdapter(
 
         var lat =currentObj.latitude
         var lon =currentObj.longitude
+
+
+        holder.binding.favoriteCard.setOnClickListener {
+            if (checkConnection()){
+            onClick.sendData(lat,lon)
+            }
+            else{
+                Toast.makeText(context,"No Internet",Toast.LENGTH_SHORT)
+            }
+        }
 
 
     }

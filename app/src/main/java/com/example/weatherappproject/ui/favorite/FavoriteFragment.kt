@@ -105,4 +105,10 @@ class FavoriteFragment : Fragment(), OnClick {
     override fun onDeleteClickFavorites(city: FavoriteAddress) {
         myViewModel.deleteFavorite(city)
     }
+    override fun sendData(lat: Double, long: Double) {
+        val action=FavoriteFragmentDirections.actionNavFavoriteToDetailsFragment().setDetailsLat(lat.toString()).setDetailsLon(
+            long.toString()
+        )
+        Navigation.findNavController(requireView()).navigate(action)
+    }
 }
