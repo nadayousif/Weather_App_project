@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
 import com.example.weatherappproject.databinding.FragmentMapsBinding
 import com.example.weatherappproject.util.ConnectionUtils.checkConnection
@@ -24,7 +25,6 @@ import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.newSingleThreadContext
 
 class MapsFragment : Fragment() {
     lateinit var binding: FragmentMapsBinding
@@ -34,6 +34,7 @@ class MapsFragment : Fragment() {
     var lat :Double = 0.0
     var lon :Double = 0.0
     lateinit var location : LatLng
+    val args: MapsFragmentArgs by navArgs()
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
@@ -59,12 +60,21 @@ class MapsFragment : Fragment() {
         mapFragment.getMapAsync(callback)
         mapInitialize()
         binding.goBtn.setOnClickListener {
-            Log.i("nada", "${lat},${lon}")
+
+            if (args.fromFav ==0){
+                Log.i("nada", "${lat},${lon}")
+                val action = MapsFragmentDirections.actionMapsFragmentToNavFavorite().setFav(true).setLatFav(lat.toString()).setLonFav(lon.toString())
+                findNavController().navigate(action)
+            }
+             else{
+                Log.i("home", "${lat},${lon}")
             val action = MapsFragmentDirections.actionMapsFragmentToNavHome(
                 lat.toString(),
                 lon.toString()
-        ).setMap(true)
-            findNavController().navigate(action) }
+            ).setMap(true)
+            findNavController().navigate(action)
+        }
+           }
 
         return binding.root
     }
@@ -104,13 +114,14 @@ class MapsFragment : Fragment() {
     }
     private fun goToSearchLocation(){
         var searchLocation = binding.searchEditText.text.toString()
+        if(checkConnection()){
         var list = Geocoder(requireContext()).getFromLocationName(searchLocation,1)
-        if (list!= null && list.size>0){
+        if (list!= null && list.size>0) {
             var address: Address = list.get(0)
             lat = address.latitude
             lon = address.longitude
-            goToLatLng(address.latitude,address.latitude,16f)
-
+            goToLatLng(address.latitude, address.latitude, 16f)
+        }
         }
 
 

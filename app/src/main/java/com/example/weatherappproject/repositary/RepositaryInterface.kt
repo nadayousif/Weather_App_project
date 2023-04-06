@@ -6,6 +6,7 @@ import retrofit2.Response
 
 interface RepositaryInterface {
     suspend fun getWeatherOverNetwork(lat:Double,lon:Double,language:String): Response<WeatherData>
+
     //Weather
     suspend fun getWeatherDataFromDB(): WeatherData?
     suspend fun insertOrUpdateWeatherData(weatherData: WeatherData)

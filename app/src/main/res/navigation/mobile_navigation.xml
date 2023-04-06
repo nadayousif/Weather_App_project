@@ -26,7 +26,23 @@
         android:id="@+id/nav_favorite"
         android:name="com.example.weatherappproject.ui.favorite.FavoriteFragment"
         android:label="@string/menu_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <argument
+            android:name="fav"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="latFav"
+            app:argType="string"
+            android:defaultValue="0" />
+        <argument
+            android:name="lonFav"
+            app:argType="string"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_nav_favorite_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -58,5 +74,12 @@
         <action
             android:id="@+id/action_mapsFragment_to_nav_home"
             app:destination="@id/nav_home" />
+        <argument
+            android:name="fromFav"
+            app:argType="integer"
+            android:defaultValue="1" />
+        <action
+            android:id="@+id/action_mapsFragment_to_nav_favorite"
+            app:destination="@id/nav_favorite" />
     </fragment>
 </navigation>

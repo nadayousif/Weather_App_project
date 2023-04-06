@@ -10,21 +10,24 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/search_edit_text"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            />
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="20dp"/>
         <Button
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_marginRight="20dp"
             android:onClick="searchLocation"
             android:text="Search"
             />
         <Button
             android:id="@+id/go_btn"
             android:layout_width="wrap_content"
+            android:layout_marginRight="20dp"
             android:layout_height="50dp"
             android:onClick="goLocation"
             android:text="Go"

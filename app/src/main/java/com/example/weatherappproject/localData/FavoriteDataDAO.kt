@@ -9,7 +9,7 @@ interface FavoriteDataDAO {
     @Query("SELECT * FROM FavoriteDataTable")
     fun getAllFavoriteAddresses(): List<FavoriteAddress>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFavoriteAddress(address: FavoriteAddress)
 
     @Delete

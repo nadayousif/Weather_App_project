@@ -16,14 +16,14 @@ data class WeatherData(
 
 @Entity(tableName = "FavoriteDataTable", primaryKeys = ["latlngString"])
 data class FavoriteAddress(
-    val address: String,
+    var address: String,
     @NonNull
-    val latitude: Double,
+    var latitude: Double,
     @NonNull
-    val longitude: Double,
-    val latlngString: String,
-    val currentTemp: Double,
-    val currentDescription: String,
+    var longitude: Double,
+    var latlngString: String,
+    var currentTemp: Double,
+    var currentDescription: String,
     val lastCheckedTime: Long,
     val icon: String
 )
