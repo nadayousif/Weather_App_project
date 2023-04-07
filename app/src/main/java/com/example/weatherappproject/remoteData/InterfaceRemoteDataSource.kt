@@ -5,7 +5,7 @@ import retrofit2.Response
 
 
 interface InterfaceRemoteDataSource {
-    suspend fun getWeatherDataOnline(lat: Double, lon: Double, language: String): Response<WeatherData>
+    suspend fun getWeatherDataOnline(lat: Double, lon: Double, language: String,unit: String): Response<WeatherData>
 
 
 }

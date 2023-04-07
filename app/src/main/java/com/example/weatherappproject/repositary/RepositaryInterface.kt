@@ -5,7 +5,7 @@ import com.example.weatherappproject.model.WeatherData
 import retrofit2.Response
 
 interface RepositaryInterface {
-    suspend fun getWeatherOverNetwork(lat:Double,lon:Double,language:String): Response<WeatherData>
+    suspend fun getWeatherOverNetwork(lat:Double,lon:Double,language:String,unit:String): Response<WeatherData>
 
     //Weather
     suspend fun getWeatherDataFromDB(): WeatherData?

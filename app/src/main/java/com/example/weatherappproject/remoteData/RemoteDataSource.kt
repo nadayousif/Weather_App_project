@@ -26,9 +26,9 @@ class RemoteDataSource() : InterfaceRemoteDataSource {
     private val weatherRetrofit = RetrofitHelper.getRetrofitInstance(ApiService.BASE_URL_WEATHER)
     private val weatherApiService = weatherRetrofit.create(ApiService::class.java)
 
-    override suspend fun getWeatherDataOnline(lat: Double, lon: Double, language: String): Response<WeatherData> {
+    override suspend fun getWeatherDataOnline(lat: Double, lon: Double, language: String,unit: String): Response<WeatherData> {
 
-        return weatherApiService.getWeatherDataOnline(weatherApiKey, lat, lon, language)
+        return weatherApiService.getWeatherDataOnline(weatherApiKey, lat, lon, language, unit )
 
     }
 

@@ -29,9 +29,10 @@ class Repositary (var remoteSource: RemoteDataSource,private val localDataSource
         lat: Double,
         lon: Double,
         language: String,
+        unit:String
 
     ): Response<WeatherData> {
-        return remoteSource.getWeatherDataOnline(lat,lon,language)
+        return remoteSource.getWeatherDataOnline(lat,lon,language,unit)
     }
 
     //Weather

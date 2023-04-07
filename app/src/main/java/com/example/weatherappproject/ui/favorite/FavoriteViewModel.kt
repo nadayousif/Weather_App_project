@@ -44,9 +44,9 @@ class FavoriteViewModel(private val repository: RepositaryInterface) : ViewModel
 
     }
 
-    fun getWeatherFromApi(lat: Double, lon: Double, language: String) {
+    fun getWeatherFromApi(lat: Double, lon: Double, language: String,unit: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _currentWeather.postValue(repository.getWeatherOverNetwork(lat, lon,language).body())
+            _currentWeather.postValue(repository.getWeatherOverNetwork(lat, lon,language,unit).body())
         }
     }
 

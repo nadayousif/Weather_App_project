@@ -26,6 +26,7 @@ import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.localData.WeatherDataDAO
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
+import com.example.weatherappproject.util.MySharedPreference
 import com.google.android.gms.location.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -118,7 +119,7 @@ class HomeFragment : Fragment() {
         if (args.map){
             Log.i("tag", "hi "+args.lat+" "+args.lon)
             (myViewModel as HomeViewModel).getWeatherFromApi(args.lat.toDouble(),
-                args.lon.toDouble(),"eng")
+                args.lon.toDouble(), MySharedPreference.getLanguage(),MySharedPreference.getUnits())
 
         }else {
             getLastLocation()
@@ -178,7 +179,7 @@ class HomeFragment : Fragment() {
                         )*/
                         (myViewModel as HomeViewModel).getWeatherFromApi(
                             location.latitude, location.longitude,
-                            "eng",
+                            MySharedPreference.getLanguage(),MySharedPreference.getUnits()
                         )
                     }
 

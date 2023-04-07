@@ -19,6 +19,7 @@ import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
 import com.example.weatherappproject.ui.home.HomeFragmentArgs
 import com.example.weatherappproject.ui.home.HomeViewModel
+import com.example.weatherappproject.util.MySharedPreference
 
 
 class FavoriteFragment : Fragment(), OnClick {
@@ -90,7 +91,7 @@ class FavoriteFragment : Fragment(), OnClick {
         if (args.fav){
             Log.i("tag", "hi "+args.latFav+" "+args.lonFav)
             (myViewModel as FavoriteViewModel).getWeatherFromApi(args.latFav.toDouble(),
-                args.lonFav.toDouble(),"eng")
+                args.lonFav.toDouble(),"eng", "default")
 
 
         }else{

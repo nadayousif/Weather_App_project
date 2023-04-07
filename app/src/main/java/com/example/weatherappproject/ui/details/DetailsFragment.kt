@@ -18,6 +18,7 @@ import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
 import com.example.weatherappproject.ui.home.*
 import com.example.weatherappproject.util.ConnectionUtils.checkConnection
+import com.example.weatherappproject.util.MySharedPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import java.text.SimpleDateFormat
 import java.util.*
@@ -104,7 +105,8 @@ class DetailsFragment : Fragment() {
         if(checkConnection()) {
             (myViewModel as DetailsViewModel).getWeatherFromApi(
                 args.detailsLat.toDouble(),
-                args.detailsLon.toDouble(), "eng"
+                args.detailsLon.toDouble(), MySharedPreference.getLanguage(),
+                MySharedPreference.getUnits()
             )
         }
 
