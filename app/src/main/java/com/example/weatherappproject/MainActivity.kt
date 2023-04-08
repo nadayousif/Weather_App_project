@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.text.TextUtils
 import android.view.View
+import com.example.weatherappproject.util.ConnectionUtils.checkConnection
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,11 +72,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         ConnectionUtils.initialize(this.applicationContext.getSystemService(ConnectivityManager::class.java))
-       var remoteSource: RemoteDataSource = RemoteDataSource()
-        MainScope().launch(Dispatchers.IO){
-            var data =remoteSource.getWeatherDataOnline(31.2001,29.9187,MySharedPreference.getLanguage(),MySharedPreference.getUnits())
-            Log.i("nada", "onCreate: ${data.body().toString()}")
+        if (checkConnection()){
+            var remoteSource: RemoteDataSource = RemoteDataSource()
+            MainScope().launch(Dispatchers.IO){
+                var data =remoteSource.getWeatherDataOnline(31.2001,29.9187,MySharedPreference.getLanguage(),MySharedPreference.getUnits())
+                Log.i("nada", "onCreate: ${data.body().toString()}")
+            }
         }
+
     }
 
 

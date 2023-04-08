@@ -1,18 +1,22 @@
 package com.example.weatherappproject.ui.details
 
+import android.app.ProgressDialog
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 
 import com.example.weatherappproject.databinding.FragmentDetailsBinding
+import com.example.weatherappproject.localData.ApiState
 import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
@@ -20,6 +24,8 @@ import com.example.weatherappproject.ui.home.*
 import com.example.weatherappproject.util.ConnectionUtils.checkConnection
 import com.example.weatherappproject.util.MySharedPreference
 import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,6 +57,7 @@ class DetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val pd = ProgressDialog(requireActivity())
 
         myViewModelFactory = DetailsViewModelFactory(
             Repositary.getInstance(
@@ -59,8 +66,58 @@ class DetailsFragment : Fragment() {
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[DetailsViewModel::class.java]
        // (myViewModel as HomeViewModel).getWeatherFromApi(latitude,longitude,"eng")
+        lifecycleScope.launch {
+            (myViewModel).currentWeather.collectLatest {
+                when (it) {
+                    is ApiState.Loading -> {
 
-        (myViewModel).currentWeather.observe(viewLifecycleOwner) {
+                        pd.setMessage("loading")
+                        pd.show()
+                    }
+                    is ApiState.Success -> {
+                        pd.dismiss()
+                        if (it.data.body() != null) {
+                            Log.i("home nada", "onCreateView: ${it.data.body()!!.lat} long  ${it.data.body()!!.lon}" )
+                            _binding?.areaText?.text = it.data.body()!!.timezone
+                            _binding?.tempText?.text = it.data.body()!!.current.temp.toString()
+                            val dayhome = getCurrentDay(it.data.body()!!.current.dt.toInt())
+                            _binding?.statusText?.text = it.data.body()!!.current.weather.get(0).description
+                            _binding?.dateText?.text = dayhome
+                            _binding?.cloudText?.text = it.data.body()!!.current.clouds.toString()
+                            binding.humidity.text = it.data.body()!!.current.humidity.toString() + "%"
+                            _binding?.windText?.text = it.data.body()!!.current.wind_speed.toString()
+                            _binding?.pressureText?.text = it.data.body()!!.current.pressure.toString()
+                            _binding?.ultraText?.text = it.data.body()!!.current.dt.toString()
+                            _binding?.visibiltyText?.text = it.data.body()!!.current.temp.toString()
+                            Glide.with(requireActivity())
+                                .load("https://openweathermap.org/img/wn/${it.data.body()!!.current.weather.get(0).icon}@2x.png")
+                                .into(binding.statusImage)
+
+                            binding.daysWaether.apply {
+                                layoutManager = LinearLayoutManager(context)
+                                this.adapter = DayAdapter(it.data.body()!!.daily)
+                            }
+
+                            binding.hourlyWeather.apply {
+                                layoutManager =
+                                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                                this.adapter = HoursAdapter(it.data.body()!!.hourly)
+                            }
+                        }
+                    }
+                    else -> {
+                        pd.dismiss()
+                        Toast.makeText(
+                            requireActivity(),
+                            "Can't handle your request",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        /*(myViewModel).currentWeather.observe(viewLifecycleOwner) {
             if (it != null) {
                 _binding?.areaText?.text = it.timezone
                 _binding?.tempText?.text = it.current.temp.toString()
@@ -89,7 +146,7 @@ class DetailsFragment : Fragment() {
                 }
             }
 
-        }
+        }*/
 
 
         return root

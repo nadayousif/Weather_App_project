@@ -3,13 +3,14 @@ package com.example.weatherappproject.model
 import androidx.annotation.NonNull
 import androidx.room.Entity
 
-@Entity(tableName = "WeatherDataTable", primaryKeys = ["lat", "lon"])
+@Entity(tableName = "WeatherDataTable", primaryKeys = ["i"])
 data class WeatherData(
     val current: Current,
     val daily: List<Daily>,
     val hourly: List<Current>,
-    val lat: Double,
-    val lon: Double,
+    val lat: Double=1.0,
+    val lon: Double=1.0,
+    val i: Int=1,
    // val alerts: List<Alert>?,
     val timezone: String?
 )

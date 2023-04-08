@@ -15,14 +15,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.weatherappproject.databinding.FragmentFavoriteBinding
+import com.example.weatherappproject.localData.ApiState
 import com.example.weatherappproject.localData.DatabaseState
 import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
+import com.example.weatherappproject.ui.home.DayAdapter
 import com.example.weatherappproject.ui.home.HomeFragmentArgs
 import com.example.weatherappproject.ui.home.HomeViewModel
+import com.example.weatherappproject.ui.home.HoursAdapter
 import com.example.weatherappproject.util.MySharedPreference
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -61,7 +65,42 @@ class FavoriteFragment : Fragment(), OnClick {
         myViewModel = ViewModelProvider(requireActivity(), myViewModelFactory)[FavoriteViewModel::class.java]
         fav = FavoriteAddress("",0.0,0.0,"",0.0,"",0,"")
             favoriteAdapter = FavoriteAdapter(listOf(), this)
-        (myViewModel).currentWeather.observe(viewLifecycleOwner){
+
+        lifecycleScope.launch {
+            (myViewModel).currentWeather.collectLatest {
+                when (it) {
+                    is ApiState.Loading -> {
+
+                        pd.setMessage("loading")
+                        pd.show()
+                    }
+                    is ApiState.Success -> {
+                        pd.dismiss()
+                        if (it.data.body() != null) {
+                            fav.latitude=it.data.body()!!.lat
+                            fav.longitude= it.data.body()!!.lon
+                            fav.address= it.data.body()!!.timezone.toString()
+                            fav.currentDescription= it.data.body()!!.current.toString()
+                            fav.latlngString= it.data.body()!!.lat.toString()+it.data.body()!!.lon.toString()
+                            fav.currentTemp=it.data.body()!!.current.temp
+
+
+                            (myViewModel as FavoriteViewModel).insertFavorite( fav)//nada
+                        }
+                    }
+                    else -> {
+                        pd.dismiss()
+                        Toast.makeText(
+                            requireActivity(),
+                            "Can't handle your request",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        /*(myViewModel).currentWeather.observe(viewLifecycleOwner){
 
             fav.latitude=it.lat
             fav.longitude= it.lon
@@ -73,7 +112,7 @@ class FavoriteFragment : Fragment(), OnClick {
 
             (myViewModel as FavoriteViewModel).insertFavorite( fav)//nada
 
-        }
+        }*/
         binding.favoriteRv.adapter = favoriteAdapter
         binding.favoriteRv.layoutManager = LinearLayoutManager(context)
         binding.floatingButton.setOnClickListener {

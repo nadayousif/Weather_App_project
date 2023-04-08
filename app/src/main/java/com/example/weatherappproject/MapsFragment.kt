@@ -25,6 +25,10 @@ import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MapsFragment : Fragment() {
     lateinit var binding: FragmentMapsBinding
@@ -101,30 +105,36 @@ class MapsFragment : Fragment() {
 
     private fun goToLatLng(latitude: Double,longitude:Double, float: Float) {
         var name = "Unknown "
+
         if(checkConnection()) {
-            var geocoder = Geocoder(requireContext()).getFromLocation(latitude, longitude, 1)
-            if (geocoder!!.size > 0)
-                name = "${geocoder?.get(0)?.subAdminArea} , ${geocoder?.get(0)?.adminArea}"
-            var latLng = LatLng(latitude, longitude)
-            var update: CameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, float)
-            mMap.addMarker(MarkerOptions().position(latLng))
-            mMap.animateCamera(update)
+            GlobalScope.launch(Dispatchers.IO) {
+                var geocoder = Geocoder(requireContext()).getFromLocation(latitude, longitude, 1)
+                if (geocoder!!.size > 0)
+                    name = "${geocoder?.get(0)?.subAdminArea} , ${geocoder?.get(0)?.adminArea}"
+                var latLng = LatLng(latitude, longitude)
+                var update: CameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, float)
+                withContext(Dispatchers.Main) {
+                    mMap.addMarker(MarkerOptions().position(latLng))
+                    mMap.animateCamera(update)
+                }
+            }
         }
 
     }
     private fun goToSearchLocation(){
-        var searchLocation = binding.searchEditText.text.toString()
-        if(checkConnection()){
-        var list = Geocoder(requireContext()).getFromLocationName(searchLocation,1)
-        if (list!= null && list.size>0) {
-            var address: Address = list.get(0)
-            lat = address.latitude
-            lon = address.longitude
-            goToLatLng(address.latitude, address.latitude, 16f)
-        }
-        }
 
-
+            var searchLocation = binding.searchEditText.text.toString()
+            if(checkConnection()){
+                GlobalScope.launch(Dispatchers.IO){
+                var list = Geocoder(requireContext()).getFromLocationName(searchLocation,1)
+                if (list!= null && list.size>0) {
+                    var address: Address = list.get(0)
+                    lat = address.latitude
+                    lon = address.longitude
+                    goToLatLng(address.latitude, address.latitude, 16f)
+                }
+            }
+        }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

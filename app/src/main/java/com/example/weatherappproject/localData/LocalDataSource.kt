@@ -29,7 +29,7 @@ class LocalDataSource(context: Context) : InterfaceLocalDataSource {
         }
     }
     //Weather
-    override suspend fun getWeatherDataFromDB(): WeatherData?{
+    override  fun getWeatherDataFromDB(): Flow<WeatherData?>{
         return weatherDataDAO.getWeatherDataFromDB()
     }
     override suspend fun insertOrUpdateWeatherData(weatherData: WeatherData){

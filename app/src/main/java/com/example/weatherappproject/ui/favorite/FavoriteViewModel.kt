@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherappproject.localData.ApiState
 import com.example.weatherappproject.localData.DatabaseState
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
@@ -20,8 +21,9 @@ class FavoriteViewModel(private val repository: RepositaryInterface) : ViewModel
     private var _favoriteWeather: MutableStateFlow<DatabaseState> =
         MutableStateFlow(DatabaseState.Loading)
     val favoriteWeather: StateFlow<DatabaseState> = _favoriteWeather
-    private var _currentWeather = MutableLiveData<WeatherData>()
-    var currentWeather: LiveData<WeatherData> = _currentWeather
+
+    private var _currentWeather: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Loading)
+    var currentWeather: StateFlow<ApiState> = _currentWeather
     init {
         getAllFavorite()
     }
@@ -57,7 +59,17 @@ class FavoriteViewModel(private val repository: RepositaryInterface) : ViewModel
 
     fun getWeatherFromApi(lat: Double, lon: Double, language: String,unit: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _currentWeather.postValue(repository.getWeatherOverNetwork(lat, lon,language,unit).body())
+            val response = repository.getWeatherOverNetwork(lat, lon,language,unit)
+            withContext(Dispatchers.Main) {
+                response
+                    .catch {
+                        _currentWeather.value= ApiState.Failure(it)
+                    }
+                    .collect {
+                        _currentWeather.value = ApiState.Success(it)
+
+                    }
+            }
         }
     }
 

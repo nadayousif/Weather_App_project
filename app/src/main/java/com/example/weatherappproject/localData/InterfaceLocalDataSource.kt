@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface InterfaceLocalDataSource {
     //Weather
-    suspend fun getWeatherDataFromDB(): WeatherData?
+     fun getWeatherDataFromDB(): Flow<WeatherData?>
     suspend fun insertOrUpdateWeatherData(weatherData: WeatherData)
 
     //Favorites

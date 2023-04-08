@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface RepositaryInterface {
-    suspend fun getWeatherOverNetwork(lat:Double,lon:Double,language:String,unit:String): Response<WeatherData>
+     fun getWeatherOverNetwork(lat:Double,lon:Double,language:String,unit:String): Flow<Response<WeatherData>>
 
     //Weather
-    suspend fun getWeatherDataFromDB(): WeatherData?
+     fun getWeatherDataFromDB(): Flow<WeatherData?>
     suspend fun insertOrUpdateWeatherData(weatherData: WeatherData)
     //Favorites
     fun getAllFavoriteAddresses(): Flow<List<FavoriteAddress>>

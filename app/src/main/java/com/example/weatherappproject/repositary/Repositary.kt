@@ -6,6 +6,7 @@ import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class Repositary (var remoteSource: RemoteDataSource,private val localDataSource: LocalDataSource): RepositaryInterface{
@@ -26,18 +27,18 @@ class Repositary (var remoteSource: RemoteDataSource,private val localDataSource
         }
     }
 
-    override suspend fun getWeatherOverNetwork(
+    override  fun getWeatherOverNetwork(
         lat: Double,
         lon: Double,
         language: String,
         unit:String
 
-    ): Response<WeatherData> {
-        return remoteSource.getWeatherDataOnline(lat,lon,language,unit)
+    ): Flow<Response<WeatherData>> {
+        return flow { emit(remoteSource.getWeatherDataOnline(lat,lon,language,unit))  }
     }
 
     //Weather
-    override suspend fun getWeatherDataFromDB(): WeatherData?{
+    override  fun getWeatherDataFromDB(): Flow<WeatherData?>{
         return localDataSource.getWeatherDataFromDB()
     }
     override suspend fun insertOrUpdateWeatherData(weatherData: WeatherData) {
