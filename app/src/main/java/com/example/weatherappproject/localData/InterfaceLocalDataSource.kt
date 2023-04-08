@@ -3,6 +3,7 @@ package com.example.weatherappproject.localData
 import androidx.lifecycle.LiveData
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
+import kotlinx.coroutines.flow.Flow
 
 
 interface InterfaceLocalDataSource {
@@ -11,7 +12,7 @@ interface InterfaceLocalDataSource {
     suspend fun insertOrUpdateWeatherData(weatherData: WeatherData)
 
     //Favorites
-    fun getAllFavoriteAddresses(): List<FavoriteAddress>
+    fun getAllFavoriteAddresses(): Flow<List<FavoriteAddress>>
     suspend fun insertFavoriteAddress(address: FavoriteAddress)
     suspend fun deleteFavoriteAddress(address: FavoriteAddress)
 

@@ -1,18 +1,22 @@
 package com.example.weatherappproject.ui.favorite
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappproject.databinding.FragmentFavoriteBinding
+import com.example.weatherappproject.localData.DatabaseState
 import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.remoteData.RemoteDataSource
@@ -20,6 +24,8 @@ import com.example.weatherappproject.repositary.Repositary
 import com.example.weatherappproject.ui.home.HomeFragmentArgs
 import com.example.weatherappproject.ui.home.HomeViewModel
 import com.example.weatherappproject.util.MySharedPreference
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class FavoriteFragment : Fragment(), OnClick {
@@ -43,7 +49,7 @@ class FavoriteFragment : Fragment(), OnClick {
 
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        val pd = ProgressDialog(requireActivity())
         //Factory
         myViewModelFactory = FavoriteViewModelFactory(
             Repositary.getInstance(
@@ -68,8 +74,38 @@ class FavoriteFragment : Fragment(), OnClick {
             (myViewModel as FavoriteViewModel).insertFavorite( fav)//nada
 
         }
+        binding.favoriteRv.adapter = favoriteAdapter
+        binding.favoriteRv.layoutManager = LinearLayoutManager(context)
+        binding.floatingButton.setOnClickListener {
+            val action =
+                FavoriteFragmentDirections.actionNavFavoriteToMapsFragment().setFromFav(0)
+            Navigation.findNavController(it).navigate(action)
+        }
 
-        myViewModel.favoriteWeather.observe(viewLifecycleOwner) {
+
+        lifecycleScope.launch {
+            myViewModel.favoriteWeather.collectLatest {
+                when(it){
+                    is DatabaseState.Loading ->{
+
+                        pd.setMessage("loading")
+                        pd.show()
+
+
+                    }
+                    is DatabaseState.Success->{
+                        pd.dismiss()
+                        favoriteAdapter.setList(it.data)
+                    }
+                    else->{
+                        pd.dismiss()
+                        //Toast.makeText(this@FavoriteFragment,"Can't handle your request", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+       /* myViewModel.favoriteWeather.observe(viewLifecycleOwner) {
             favoriteAdapter.setList(it)
 
             binding.favoriteRv.adapter = favoriteAdapter
@@ -80,7 +116,7 @@ class FavoriteFragment : Fragment(), OnClick {
                 Navigation.findNavController(it).navigate(action)
             }
 
-        }
+        }*/
 
 
 

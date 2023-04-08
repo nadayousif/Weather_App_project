@@ -5,6 +5,7 @@ import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
 import com.example.weatherappproject.remoteData.RemoteDataSource
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class Repositary (var remoteSource: RemoteDataSource,private val localDataSource: LocalDataSource): RepositaryInterface{
@@ -44,7 +45,7 @@ class Repositary (var remoteSource: RemoteDataSource,private val localDataSource
     }
 
     //Favorites
-    override fun getAllFavoriteAddresses(): List<FavoriteAddress> {
+    override fun getAllFavoriteAddresses(): Flow<List<FavoriteAddress>> {
         return localDataSource.getAllFavoriteAddresses()
     }
     override suspend fun insertFavoriteAddress(address: FavoriteAddress){

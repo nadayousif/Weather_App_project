@@ -24,4 +24,12 @@ class HomeViewModel (private val repo: RepositaryInterface) : ViewModel() {
             _currentWeather.postValue(repo.getWeatherDataFromDB())
         }
     }
+    fun insertWeatherData (weatherData: WeatherData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertOrUpdateWeatherData(weatherData)
+            getWeatherDataFromDB ()
+        }
+    }
+
+
 }

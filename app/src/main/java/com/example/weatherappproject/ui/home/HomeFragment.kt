@@ -26,6 +26,10 @@ import com.example.weatherappproject.DialogeFragmentDirections
 import com.example.weatherappproject.databinding.FragmentHomeBinding
 import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.localData.WeatherDataDAO
+import com.example.weatherappproject.model.Current
+import com.example.weatherappproject.model.Daily
+import com.example.weatherappproject.model.FavoriteAddress
+import com.example.weatherappproject.model.WeatherData
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.example.weatherappproject.repositary.Repositary
 import com.example.weatherappproject.util.MySharedPreference
@@ -42,6 +46,7 @@ class HomeFragment : Fragment() {
     lateinit var myViewModelFactory: HomeViewModelFactory
     private lateinit var fusedClient : FusedLocationProviderClient
     lateinit var geocoder: Geocoder
+    lateinit var weatherData: WeatherData
     val args:HomeFragmentArgs by navArgs()
 
     // This property is only valid between onCreateView and
@@ -67,13 +72,15 @@ class HomeFragment : Fragment() {
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[HomeViewModel::class.java]
 
-            myViewModel.getWeatherDataFromDB()
+            //myViewModel.getWeatherDataFromDB()
 
 
         //(myViewModel as HomeViewModel).getWeatherFromApi(31.2001,29.9187,"eng")
 
         (myViewModel).currentWeather.observe(viewLifecycleOwner) {
             if (it != null) {
+                weatherData = it
+                myViewModel.insertWeatherData(weatherData)
                 _binding?.areaText?.text = it.timezone
                 _binding?.tempText?.text = it.current.temp.toString()
                 val dayhome = getCurrentDay(it.current.dt.toInt())
@@ -99,6 +106,8 @@ class HomeFragment : Fragment() {
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     this.adapter = HoursAdapter(it.hourly)
                 }
+
+
             }
 
         }
@@ -118,18 +127,25 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (args.map){
-            Log.i("tag", "hi "+args.lat+" "+args.lon)
-            (myViewModel as HomeViewModel).getWeatherFromApi(args.lat.toDouble(),
-                args.lon.toDouble(), MySharedPreference.getLanguage(),MySharedPreference.getUnits())
+        if(checkPermissions()){
+            if (args.map){
+                Log.i("tag", "hi "+args.lat+" "+args.lon)
+                (myViewModel as HomeViewModel).getWeatherFromApi(args.lat.toDouble(),
+                    args.lon.toDouble(), MySharedPreference.getLanguage(),MySharedPreference.getUnits())
 
-        }
-        /*else if(MySharedPreference.getWeatherFromMap()){
 
-        }*/
-        else {
-            getLastLocation()
+            }
+            /*else if(MySharedPreference.getWeatherFromMap()){
+
+            }*/
+            else {
+                getLastLocation()
+
+            }
+        }else{
+            myViewModel.getWeatherDataFromDB()
         }
+
     }
 
     private fun checkPermissions(): Boolean {

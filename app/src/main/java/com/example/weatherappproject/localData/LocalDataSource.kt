@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
+import kotlinx.coroutines.flow.Flow
 
 
 class LocalDataSource(context: Context) : InterfaceLocalDataSource {
@@ -35,7 +36,7 @@ class LocalDataSource(context: Context) : InterfaceLocalDataSource {
         weatherDataDAO.insertOrUpdateWeatherData(weatherData)
     }
     //Favorites
-    override fun getAllFavoriteAddresses(): List<FavoriteAddress>{
+    override fun getAllFavoriteAddresses(): Flow<List<FavoriteAddress>> {
         return favoriteAddressDAO.getAllFavoriteAddresses()
     }
     override suspend fun insertFavoriteAddress(address: FavoriteAddress){
