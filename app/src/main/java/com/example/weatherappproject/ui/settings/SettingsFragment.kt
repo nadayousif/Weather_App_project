@@ -42,6 +42,38 @@ class SettingsFragment : Fragment() {
         else
             binding.languageRadioGroup.check(R.id.arabic_btn)
 
+        if (MySharedPreference.getWeatherFromMap())
+            binding.location.check(R.id.map_btn)
+        else
+            binding.location.check(R.id.gps_btn)
+
+        binding.location.setOnCheckedChangeListener { radioGroup: RadioGroup, i: Int ->
+            if (i == R.id.map_btn)
+                MySharedPreference.setWeatherFromMap(true)
+            else
+                MySharedPreference.setWeatherFromMap(false)
+        }
+        when (MySharedPreference.getWind()){
+            "default" -> {
+                binding.windBtn.check(R.id.meter_sec)
+            }
+            "metric" -> {
+                binding.windBtn.check(R.id.miles_hour)
+            }
+        }
+
+        binding.windBtn.setOnCheckedChangeListener { radioGroup: RadioGroup, i: Int ->
+            when (i) {
+                R.id.meter_sec -> {
+                    MySharedPreference.setWind("default")
+                }
+                R.id.miles_hour -> {
+                    MySharedPreference.setWind("metric")
+                }
+            }
+        }
+
+
 
 
         when (MySharedPreference.getUnits()) {

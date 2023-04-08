@@ -18,9 +18,11 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.weatherappproject.DialogeFragmentDirections
 import com.example.weatherappproject.databinding.FragmentHomeBinding
 import com.example.weatherappproject.localData.LocalDataSource
 import com.example.weatherappproject.localData.WeatherDataDAO
@@ -121,7 +123,11 @@ class HomeFragment : Fragment() {
             (myViewModel as HomeViewModel).getWeatherFromApi(args.lat.toDouble(),
                 args.lon.toDouble(), MySharedPreference.getLanguage(),MySharedPreference.getUnits())
 
-        }else {
+        }
+        /*else if(MySharedPreference.getWeatherFromMap()){
+
+        }*/
+        else {
             getLastLocation()
         }
     }

@@ -40,6 +40,11 @@ object MySharedPreference {
         return sharedPreferences.getString("unit","default")!!
     }
 
+    fun getWind(): String {
+
+        return sharedPreferences.getString("unit","default")!!
+    }
+
     fun setLanguage(s: String) {
         val editor = sharedPreferences.edit()
         editor.putString("language",s)
@@ -47,6 +52,11 @@ object MySharedPreference {
     }
 
     fun setUnit(s: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("unit",s)
+        editor.apply()
+    }
+    fun setWind(s: String) {
         val editor = sharedPreferences.edit()
         editor.putString("unit",s)
         editor.apply()
