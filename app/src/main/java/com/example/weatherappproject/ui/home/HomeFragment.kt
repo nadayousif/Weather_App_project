@@ -260,6 +260,7 @@ class HomeFragment : Fragment() {
             }
         }else{
             myViewModel.getWeatherDataFromDB()
+            Log.i("from database ya nada", "onResume: ")
         }
 
     }

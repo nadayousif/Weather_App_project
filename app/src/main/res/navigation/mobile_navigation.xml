@@ -99,4 +99,9 @@
             app:argType="string"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/dialogeAlertFragment"
+        android:name="com.example.weatherappproject.ui.alert.notificationAlert.DialogeAlertFragment"
+        android:label="fragment_dialoge_alert"
+        tools:layout="@layout/fragment_dialoge_alert" />
 </navigation>

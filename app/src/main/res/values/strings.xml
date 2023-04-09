@@ -34,4 +34,16 @@
     <string name="WindSpeed">"Wind speed "</string>
     <string name="meter_sec">meter_sec</string>
     <string name="miles_hour">miles_hour</string>
+    <string name="country">country</string>
+    <string name="start">start</string>
+    <string name="end">end</string>
+    <string name="From">From</string>
+    <string name="TO">TO</string>
+    <string name="StartDate">Start Date</string>
+    <string name="EndDate">End Date</string>
+    <string name="Country">Country</string>
+    <string name="Alarm">Alarm</string>
+    <string name="notification">notification</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Save">Save</string>
 </resources>
