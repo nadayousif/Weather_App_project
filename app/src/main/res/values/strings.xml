@@ -46,4 +46,9 @@
     <string name="notification">notification</string>
     <string name="Cancel">Cancel</string>
     <string name="Save">Save</string>
+    <string name="CancelAlarm">Cancel</string>
+    <string name="notification_channel">NotificationChannel</string>
+    <string name="FromTime">FromTime</string>
+    <string name="ToTime">ToTime</string>
+    <string name="WeatherAPP">Weather APP</string>
 </resources>

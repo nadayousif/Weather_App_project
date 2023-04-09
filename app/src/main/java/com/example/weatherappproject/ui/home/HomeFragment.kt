@@ -4,12 +4,16 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Looper
+import android.preference.PreferenceManager
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,6 +58,7 @@ class HomeFragment : Fragment() {
     lateinit var geocoder: Geocoder
     lateinit var weatherData: WeatherData
     val args:HomeFragmentArgs by navArgs()
+    lateinit var sharedPreferences: SharedPreferences
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -75,7 +80,7 @@ class HomeFragment : Fragment() {
 
 
         myViewModelFactory = HomeViewModelFactory(Repositary.getInstance(RemoteDataSource.getInstance(),
-            LocalDataSource.getInstance(requireContext())))
+            LocalDataSource.getInstance(requireContext()), PreferenceManager.getDefaultSharedPreferences(requireContext())))
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[HomeViewModel::class.java]
 
@@ -244,7 +249,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(checkConnection()){
+        if(isOnline()){
 
             if (args.map && args!=null){
                 Log.i("tag", "hi "+args.lat+" "+args.lon)
@@ -385,5 +390,27 @@ class HomeFragment : Fragment() {
         val date = Date(dateObject!! * 1000L)
         val sdf = SimpleDateFormat("HH:mm")
         return sdf.format(date)
+    }
+
+    private fun isOnline(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

@@ -2,7 +2,9 @@ package com.example.weatherappproject.ui.favorite
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +44,7 @@ class FavoriteFragment : Fragment(), OnClick {
     lateinit var fav :FavoriteAddress
     private val binding get() = _binding!!
     val args: FavoriteFragmentArgs by navArgs()
+    lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -58,7 +61,8 @@ class FavoriteFragment : Fragment(), OnClick {
         myViewModelFactory = FavoriteViewModelFactory(
             Repositary.getInstance(
                 RemoteDataSource.getInstance(),
-                LocalDataSource.getInstance(requireContext())
+                LocalDataSource.getInstance(requireContext()),
+                PreferenceManager.getDefaultSharedPreferences(requireContext())
             )
         )
 

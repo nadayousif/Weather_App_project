@@ -2,6 +2,7 @@ package com.example.weatherappproject.localData
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.example.weatherappproject.model.Alert
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +45,26 @@ class LocalDataSource(context: Context) : InterfaceLocalDataSource {
     }
     override suspend fun deleteFavoriteAddress(address: FavoriteAddress){
         favoriteAddressDAO.deleteFavoriteAddress(address)
+    }
+
+    private val alert: AlertDataDao by lazy {
+        val db: MyDatabase = MyDatabase.getInstance(context)
+        db.getAlertDao()
+    }
+
+    override fun getAlerts(): Flow<List<Alert>> {
+        return alert.getAlerts()
+
+    }
+
+    override suspend fun insertAlert(alerts: Alert) {
+        alert.insertAlert(alerts)
+
+    }
+
+    override suspend fun deleteAlert(alerts: Alert) {
+        alert.deleteAlert(alerts)
+
     }
 
 }

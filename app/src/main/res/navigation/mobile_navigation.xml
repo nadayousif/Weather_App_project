@@ -56,7 +56,14 @@
         android:id="@+id/alertFragment"
         android:name="com.example.weatherappproject.ui.alert.AlertFragment"
         android:label="fragment_alert"
-        tools:layout="@layout/fragment_alert" />
+        tools:layout="@layout/fragment_alert" >
+        <action
+            android:id="@+id/action_alertFragment_to_dialogeAlertFragment"
+            app:destination="@id/dialogeAlertFragment" />
+        <action
+            android:id="@+id/action_alertFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/dialogeFragment"
         android:name="com.example.weatherappproject.DialogeFragment"
@@ -103,5 +110,9 @@
         android:id="@+id/dialogeAlertFragment"
         android:name="com.example.weatherappproject.ui.alert.notificationAlert.DialogeAlertFragment"
         android:label="fragment_dialoge_alert"
-        tools:layout="@layout/fragment_dialoge_alert" />
+        tools:layout="@layout/fragment_dialoge_alert" >
+        <action
+            android:id="@+id/action_dialogeAlertFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
 </navigation>

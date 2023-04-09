@@ -1,10 +1,7 @@
 package com.example.weatherappproject.util
 
 import androidx.room.TypeConverter
-import com.example.weatherappproject.model.Current
-import com.example.weatherappproject.model.Daily
-import com.example.weatherappproject.model.Hourly
-import com.example.weatherappproject.model.Weather
+import com.example.weatherappproject.model.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -136,5 +133,21 @@ class MyConverters {
             TypeToken<List<Hourly?>?>() {}.type
         return gson.fromJson<List<Hourly>>(item, type)
     }
+
+    @TypeConverter
+    fun fromAlertSettingsToGson(minutely: List<AlertSettings>): String = Gson().toJson(minutely)
+
+
+    @TypeConverter
+    fun fromGsonToAlertSettings(string: String): List<AlertSettings> =
+        Gson().fromJson(string, Array<AlertSettings>::class.java).toList()
+
+
+    @TypeConverter
+    fun fromAlertToGson(alerts: List<Alert?>?) = Gson().toJson(alerts)!!
+
+    @TypeConverter
+    fun fromGsonToAlert(stringAlert: String?) =
+        Gson().fromJson(stringAlert, Array<Alert?>::class.java)?.toList()
 
 }

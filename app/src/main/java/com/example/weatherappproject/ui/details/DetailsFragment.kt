@@ -1,8 +1,10 @@
 package com.example.weatherappproject.ui.details
 
 import android.app.ProgressDialog
+import android.content.SharedPreferences
 import android.location.Geocoder
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +41,7 @@ class DetailsFragment : Fragment() {
     var latitude = 0.0
     var longitude = 0.0
     val args: DetailsFragmentArgs by navArgs()
+    lateinit var sharedPreferences: SharedPreferences
 
 
     private val binding get() = _binding!!
@@ -62,7 +65,8 @@ class DetailsFragment : Fragment() {
         myViewModelFactory = DetailsViewModelFactory(
             Repositary.getInstance(
                 RemoteDataSource.getInstance(),
-            LocalDataSource.getInstance(requireContext())))
+            LocalDataSource.getInstance(requireContext()),
+                PreferenceManager.getDefaultSharedPreferences(requireContext())))
         myViewModel =
             ViewModelProvider(this.requireActivity(), myViewModelFactory)[DetailsViewModel::class.java]
        // (myViewModel as HomeViewModel).getWeatherFromApi(latitude,longitude,"eng")

@@ -2,6 +2,10 @@ package com.example.weatherappproject.model
 
 import androidx.annotation.NonNull
 import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.weatherappproject.util.MyConverters
+import java.io.Serializable
 
 @Entity(tableName = "WeatherDataTable", primaryKeys = ["i"])
 data class WeatherData(
@@ -36,28 +40,27 @@ data class Current(
     val temp: Double,
     val wind_speed: Double,
     val weather: List<Weather>
-)
-data class Alert(
-    val description: String,
-    val start: Int,
-    val end: Int,
-    val event: String,
-    val sender_name: String,
-    val tags: List<String>
+
 )
 
-data class AlertItem(
-    val address: String,
-    val longitudeString: String,
-    val latitudeString: String,
-    val startString: String,
-    val endString: String,
-    val startDT: Int,
-    val endDT: Int,
-    val idHashLongFromLonLatStartStringEndStringAlertType: Long,
-    val alertType: String,
-    val timeAdded: Long
+@Entity(tableName = "Alert")
+data class Alert(
+    var startDay: Long,
+    var endDay: Long,
+    var lat: Double,
+    var lon: Double,
+    @PrimaryKey
+    var AlertCityName :String
+) : Serializable
+
+
+data class AlertSettings (
+    var lat:Double=36.4761,
+    var lon:Double=-119.4432,
+    var isALarm:Boolean=true,
+    var isNotification:Boolean=false
 )
+
 
 data class Daily(
     val dt: Int,

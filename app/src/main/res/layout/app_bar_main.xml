@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#3A9BDC"
             app:popupTheme="@style/Theme.WeatherAppProject.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
