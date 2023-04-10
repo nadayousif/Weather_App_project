@@ -12,8 +12,8 @@ data class WeatherData(
     val current: Current,
     val daily: List<Daily>,
     val hourly: List<Current>,
-    val lat: Double=1.0,
-    val lon: Double=1.0,
+    var lat: Double=1.0,
+    var lon: Double=1.0,
     val i: Int=1,
    // val alerts: List<Alert>?,
     val timezone: String?

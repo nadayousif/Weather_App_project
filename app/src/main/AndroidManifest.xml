@@ -22,9 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherAppProject"
         tools:targetApi="31">
-        <activity
-            android:name=".NotificationActivity"
-            android:exported="false" />
+
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -39,6 +38,14 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+        <receiver
+            android:name=".ui.alert.notificationAlert.AlertRecevier"
+            android:enabled="true"
+            android:exported="true" />
+        <receiver
+            android:name=".ui.alert.notificationAlert.Recevier"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".MainActivity"
@@ -51,6 +58,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

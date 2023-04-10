@@ -5,11 +5,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.example.weatherappproject.DialogeFragmentDirections
@@ -32,6 +35,7 @@ import com.example.weatherappproject.repositary.Repositary
 import com.example.weatherappproject.ui.alert.notificationAlert.AlertRecevier
 import com.example.weatherappproject.ui.alert.notificationAlert.DialogeAlertFragment
 import com.example.weatherappproject.util.Constants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -68,6 +72,7 @@ class AlertFragment : Fragment() {
             )[AlertViewModel::class.java]
         alertViewModel.getAlertsDB()
         dialog = progressDialog(requireContext())
+        checkAlertsPermission()
 
         binding.addAlert.setOnClickListener {
             Log.i("alertttt", "onCreateView: ")
@@ -132,6 +137,25 @@ class AlertFragment : Fragment() {
         }
         alarmMgr.cancel(alarmIntent)
 
+    }
+    private fun checkAlertsPermission() {
+        if (!Settings.canDrawOverlays(requireContext())) {
+            val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+            alertDialogBuilder.setTitle("permission")
+                .setMessage("want_app_to_access_alerts")
+                .setPositiveButton("ok") { dialog: DialogInterface, i: Int ->
+                    var myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                    startActivity(myIntent)
+                    dialog.dismiss()
+                }.setNegativeButton(
+                    "cancel"
+                ) { dialog: DialogInterface, i: Int ->
+                    dialog.dismiss()
+                    val action = AlertFragmentDirections.actionAlertFragmentToMapsFragment()
+                    view?.let { Navigation.findNavController(it).navigate(action) }
+
+                }.show()
+        }
     }
 
 

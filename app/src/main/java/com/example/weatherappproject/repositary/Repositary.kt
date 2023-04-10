@@ -7,13 +7,14 @@ import com.example.weatherappproject.model.Alert
 import com.example.weatherappproject.model.AlertSettings
 import com.example.weatherappproject.model.FavoriteAddress
 import com.example.weatherappproject.model.WeatherData
+import com.example.weatherappproject.remoteData.InterfaceRemoteDataSource
 import com.example.weatherappproject.remoteData.RemoteDataSource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-class Repositary (var remoteSource: RemoteDataSource,private val localDataSource: LocalDataSource,var sharedPreferences: SharedPreferences): RepositaryInterface{
+class Repositary (var remoteSource: InterfaceRemoteDataSource, private val localDataSource: InterfaceLocalDataSource, var sharedPreferences: SharedPreferences): RepositaryInterface{
 
     private var sharedPreferencesedit = sharedPreferences.edit()
     val ALERTSETTINGS = "ALERTSETTINGS"
@@ -21,8 +22,8 @@ class Repositary (var remoteSource: RemoteDataSource,private val localDataSource
         @Volatile
         private var INSTANCE: Repositary? = null
         fun getInstance (
-            remoteSource: RemoteDataSource,
-            localDataSource: LocalDataSource,
+            remoteSource: InterfaceRemoteDataSource,
+            localDataSource: InterfaceLocalDataSource,
             sharedPreferences: SharedPreferences
         ): Repositary{
             return INSTANCE ?: synchronized(this) {
